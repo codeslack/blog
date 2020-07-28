@@ -30,14 +30,11 @@ class CreateUser extends Job
     public function handle()
     {
         \DB::transaction(function () {
+
             $this->user = User::create($this->request->all());
 
-            // // Upload picture
-            // if ($this->request->file('picture')) {
-            //     $media = $this->getMedia($this->request->file('picture'), 'users');
-
-            //     $this->user->attachMedia($media, 'picture');
-            // }
+            $this->dispatch(new CreateInvoice($this->user, $this->request));
+            
         });
 
         return $this->user;
